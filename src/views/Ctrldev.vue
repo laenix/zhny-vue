@@ -27,35 +27,34 @@ export default {
       cmdtype: '',
     };
   },
-  mounted() {
+  created() {
     this.Readalldevs();
   },
   methods: {
-    ...mapActions('devModule', { readall: 'readall', ctrldev: 'crtldev' }),
+    ...mapActions('devModule', { readall: 'readall', ctrldev: 'ctrldev' }),
     Readalldevs() {
       this.readall().then((res) => {
         this.options = res.data.devs;
       });
-      console.log('[mark] ctrldev.vue point 0 readall done');
     },
     sendcmd() {
       this.cmd.cmd = this.cmdtype + this.cmdvalue;
-      console.log('[mark] ctrldev.vue point 1 cmdbuild done', this.cmd);
-      this.ctrldev(this.cmd).then((res) => {
-        this.$bvToast.toast(res.data.msg, {
-          title: '发布命令',
-          variant: 'success',
-          autoHideDelay: 2000,
-          solid: true,
+      this.ctrldev(this.cmd)
+        .then((res) => {
+          this.$bvToast.toast(res.data.msg, {
+            title: '发布命令',
+            variant: 'success',
+            autoHideDelay: 2000,
+            solid: true,
+          });
+        }).catch((err) => {
+          this.$bvToast.toast(err.response.data.msg, {
+            title: '发布命令',
+            variant: 'danger',
+            autoHideDelay: 2000,
+            solid: true,
+          });
         });
-      }).catch((err) => {
-        this.$bvToast.toast(err.response.data.msg, {
-          title: '发布命令',
-          variant: 'danger',
-          autoHideDelay: 2000,
-          solid: true,
-        });
-      });
     },
   },
 };
